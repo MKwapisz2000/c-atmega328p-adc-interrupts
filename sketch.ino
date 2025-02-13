@@ -1,6 +1,3 @@
-//Użycie ADC w przerwaniach zewnętrznych, przy użyciu switcha,
-//bez użycia trigger source
-
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -25,29 +22,23 @@ void ADC_init()
   ADCSRA |= (1<<ADPS1);
   ADCSRA |= (1<<ADPS2);
 
+  //włączenie przerwan
+  ADCSRA |= (1<<ADIE);
+  
+  //włączenie ADC
+  ADCSRA |= (1<<ADEN);
+}
+
+int channelA0()
+{
   //kanał A0
   ADMUX &= ~(1<<MUX0);
   ADMUX &= ~(1<<MUX1);
   ADMUX &= ~(1<<MUX2);
   ADMUX &= ~(1<<MUX3);
 
-  //włączenie przerwan
-  ADCSRA |= (1<<ADIE);
-
-  //auto trigger
-  //ADCSRA |= (1<<ADATE);
-
-  //wybranie trybu przerwań - na external
-  //ADCSRB |= (1<<ADTS1);
-  
-  //włączenie ADC
-  ADCSRA |= (1<<ADEN);
-
   ADCSRA |= (1 << ADSC);
-}
-
-int channelA0()
-{
+  
   while(ADCSRA & (1<<ADSC))
   {}
 
@@ -75,10 +66,7 @@ int main()
   ExternalInterupts_init();
   
   while(1)
-  {
-   
-
-  }
+  {}
 
   return 0;
 }
